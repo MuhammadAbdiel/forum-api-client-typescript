@@ -1,6 +1,11 @@
+import { ThreadDetail } from '@/utils/types'
 import { ActionType } from './action'
+import { ReceiveThreadDetailAction } from './types'
 
-function threadDetailReducer(threadDetail = null, action = {}) {
+function threadDetailReducer(
+  threadDetail: ThreadDetail,
+  action: ReceiveThreadDetailAction,
+): ThreadDetail | null {
   switch (action.type) {
     case ActionType.RECEIVE_THREAD_DETAIL:
       return action.payload.threadDetail

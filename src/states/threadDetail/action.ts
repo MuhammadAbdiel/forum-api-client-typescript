@@ -1,13 +1,18 @@
 import api from '@/utils/api'
 import Swal from 'sweetalert2'
 import { hideLoading, showLoading } from 'react-redux-loading-bar'
+import { AppDispatch } from '../store'
+import { ClearThreadDetailAction, ReceiveThreadDetailAction } from './types'
+import { ThreadDetail } from '@/utils/types'
 
 const ActionType = {
   RECEIVE_THREAD_DETAIL: 'RECEIVE_THREAD_DETAIL',
   CLEAR_THREAD_DETAIL: 'CLEAR_THREAD_DETAIL',
 }
 
-function receiveThreadDetailActionCreator(threadDetail) {
+function receiveThreadDetailActionCreator(
+  threadDetail: ThreadDetail,
+): ReceiveThreadDetailAction {
   return {
     type: ActionType.RECEIVE_THREAD_DETAIL,
     payload: {
@@ -16,14 +21,14 @@ function receiveThreadDetailActionCreator(threadDetail) {
   }
 }
 
-function clearThreadDetailActionCreator() {
+function clearThreadDetailActionCreator(): ClearThreadDetailAction {
   return {
     type: ActionType.CLEAR_THREAD_DETAIL,
   }
 }
 
-function asyncReceiveThreadDetail(threadId) {
-  return async (dispatch) => {
+function asyncReceiveThreadDetail(threadId: string) {
+  return async (dispatch: AppDispatch) => {
     dispatch(clearThreadDetailActionCreator())
     dispatch(showLoading())
 
@@ -35,7 +40,7 @@ function asyncReceiveThreadDetail(threadId) {
       }
 
       dispatch(receiveThreadDetailActionCreator(response))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

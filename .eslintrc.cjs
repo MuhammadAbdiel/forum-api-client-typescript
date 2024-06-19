@@ -18,5 +18,6 @@ module.exports = {
     'react/prop-types': 'off',
     'react/no-unknown-property': 'off',
     'no-case-declarations': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 }

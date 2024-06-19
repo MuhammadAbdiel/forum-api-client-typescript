@@ -1,6 +1,14 @@
 import api from '@/utils/api'
 import Swal from 'sweetalert2'
 import { hideLoading, showLoading } from 'react-redux-loading-bar'
+import { AppDispatch } from '../store'
+import { Comment, CommentDetail } from '@/utils/types'
+import {
+  AddCommentAction,
+  ClearCommentsAction,
+  DeleteCommentAction,
+  ReceiveCommentsAction,
+} from './types'
 
 const ActionType = {
   RECEIVE_COMMENTS: 'RECEIVE_COMMENTS',
@@ -9,7 +17,9 @@ const ActionType = {
   DELETE_COMMENT: 'DELETE_COMMENT',
 }
 
-function receiveCommentsActionCreator(comments) {
+function receiveCommentsActionCreator(
+  comments: CommentDetail[],
+): ReceiveCommentsAction {
   return {
     type: ActionType.RECEIVE_COMMENTS,
     payload: {
@@ -18,13 +28,13 @@ function receiveCommentsActionCreator(comments) {
   }
 }
 
-function clearCommentsActionCreator() {
+function clearCommentsActionCreator(): ClearCommentsAction {
   return {
     type: ActionType.CLEAR_COMMENTS,
   }
 }
 
-function addCommentActionCreator(comment) {
+function addCommentActionCreator(comment: Comment): AddCommentAction {
   return {
     type: ActionType.ADD_COMMENT,
     payload: {
@@ -33,7 +43,7 @@ function addCommentActionCreator(comment) {
   }
 }
 
-function deleteCommentActionCreator(commentId) {
+function deleteCommentActionCreator(commentId: string): DeleteCommentAction {
   return {
     type: ActionType.DELETE_COMMENT,
     payload: {
@@ -42,8 +52,8 @@ function deleteCommentActionCreator(commentId) {
   }
 }
 
-function asyncReceiveComments(threadId) {
-  return async (dispatch) => {
+function asyncReceiveComments(threadId: string) {
+  return async (dispatch: AppDispatch) => {
     dispatch(clearCommentsActionCreator())
     dispatch(showLoading())
 
@@ -51,7 +61,7 @@ function asyncReceiveComments(threadId) {
       const threadDetail = await api.getThreadById(threadId)
 
       dispatch(receiveCommentsActionCreator(threadDetail.comments))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -63,15 +73,15 @@ function asyncReceiveComments(threadId) {
   }
 }
 
-function asyncAddComment(threadId, { content }) {
-  return async (dispatch) => {
+function asyncAddComment(threadId: string, { content }: { content: string }) {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {
       const comment = await api.createComment(threadId, { content })
       const user = await api.getOwnProfile()
 
-      const response = {
+      const response: any = {
         id: comment.id,
         content: comment.content,
         date: new Date().toISOString(),
@@ -81,7 +91,7 @@ function asyncAddComment(threadId, { content }) {
       }
 
       dispatch(addCommentActionCreator(response))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -93,15 +103,15 @@ function asyncAddComment(threadId, { content }) {
   }
 }
 
-function asyncDeleteComment(threadId, commentId) {
-  return async (dispatch) => {
+function asyncDeleteComment(threadId: string, commentId: string) {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {
       await api.deleteComment(threadId, commentId)
 
       dispatch(deleteCommentActionCreator(commentId))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

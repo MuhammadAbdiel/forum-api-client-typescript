@@ -1,13 +1,16 @@
 import api from '@/utils/api'
 import Swal from 'sweetalert2'
 import { hideLoading, showLoading } from 'react-redux-loading-bar'
+import { LoginPayload, User } from '../../utils/types'
+import { AppDispatch } from '../store'
+import { Action, AuthUser } from './types'
 
-const ActionType = {
+const ActionType: Action = {
   SET_AUTH_USER: 'SET_AUTH_USER',
   REMOVE_AUTH_USER: 'REMOVE_AUTH_USER',
 }
 
-function setAuthUserActionCreator(authUser) {
+function setAuthUserActionCreator(authUser: User | null): AuthUser {
   return {
     type: ActionType.SET_AUTH_USER,
     payload: {
@@ -16,7 +19,7 @@ function setAuthUserActionCreator(authUser) {
   }
 }
 
-function removeAuthUserActionCreator() {
+function removeAuthUserActionCreator(): AuthUser {
   return {
     type: ActionType.REMOVE_AUTH_USER,
     payload: {
@@ -25,8 +28,8 @@ function removeAuthUserActionCreator() {
   }
 }
 
-function asyncSetAuthUser({ username, password }) {
-  return async (dispatch) => {
+function asyncSetAuthUser({ username, password }: LoginPayload) {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {
@@ -40,7 +43,7 @@ function asyncSetAuthUser({ username, password }) {
         title: 'Success',
         text: 'Login Successful',
       })
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -53,7 +56,7 @@ function asyncSetAuthUser({ username, password }) {
 }
 
 function asyncRemoveAuthUser() {
-  return (dispatch) => {
+  return (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     dispatch(removeAuthUserActionCreator())

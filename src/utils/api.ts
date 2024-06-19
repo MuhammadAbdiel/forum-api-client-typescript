@@ -10,7 +10,8 @@ import {
   Reply,
   AuthResponse,
   ApiResponse,
-} from './api.types'
+  Comment,
+} from './types'
 
 const api = (() => {
   const BASE_URL = 'http://localhost:3000'

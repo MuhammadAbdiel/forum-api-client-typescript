@@ -1,12 +1,14 @@
 import api from '@/utils/api'
 import { setAuthUserActionCreator } from '../authUser/action'
 import { hideLoading, showLoading } from 'react-redux-loading-bar'
+import { Action, SetIsPreload } from './types'
+import { AppDispatch } from '../store'
 
-const ActionType = {
+const ActionType: Action = {
   SET_IS_PRELOAD: 'SET_IS_PRELOAD',
 }
 
-function setIsPreloadActionCreator(isPreload) {
+function setIsPreloadActionCreator(isPreload: boolean): SetIsPreload {
   return {
     type: ActionType.SET_IS_PRELOAD,
     payload: {
@@ -16,7 +18,7 @@ function setIsPreloadActionCreator(isPreload) {
 }
 
 function asyncPreloadProcess() {
-  return async (dispatch) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {

@@ -1,13 +1,18 @@
 import api from '@/utils/api'
 import { hideLoading, showLoading } from 'react-redux-loading-bar'
 import Swal from 'sweetalert2'
+import { Action, AddThreadAction, ReceiveThreadAction } from './types'
+import { CreateThreadPayload, ThreadList } from '@/utils/types'
+import { AppDispatch } from '../store'
 
-const ActionType = {
+const ActionType: Action = {
   RECEIVE_THREADS: 'RECEIVE_THREADS',
   ADD_THREAD: 'ADD_THREAD',
 }
 
-function receiveThreadsActionCreator(threads) {
+function receiveThreadsActionCreator(
+  threads: ThreadList[],
+): ReceiveThreadAction {
   return {
     type: ActionType.RECEIVE_THREADS,
     payload: {
@@ -16,7 +21,7 @@ function receiveThreadsActionCreator(threads) {
   }
 }
 
-function addThreadActionCreator(thread) {
+function addThreadActionCreator(thread: ThreadList): AddThreadAction {
   return {
     type: ActionType.ADD_THREAD,
     payload: {
@@ -26,14 +31,14 @@ function addThreadActionCreator(thread) {
 }
 
 function asyncReceiveThreads() {
-  return async (dispatch) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {
       const threads = await api.getAllThread()
 
       dispatch(receiveThreadsActionCreator(threads))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -45,8 +50,8 @@ function asyncReceiveThreads() {
   }
 }
 
-function asyncAddThread({ title, body }) {
-  return async (dispatch) => {
+function asyncAddThread({ title, body }: CreateThreadPayload) {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {
@@ -70,7 +75,7 @@ function asyncAddThread({ title, body }) {
         title: 'Success',
         text: 'Create Thread Successful',
       })
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

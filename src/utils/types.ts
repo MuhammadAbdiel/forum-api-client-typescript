@@ -83,8 +83,8 @@ export type AuthResponse = {
   refreshToken: string
 }
 
-export type ApiResponse<T> = {
+export type ApiResponse<Type> = {
   status: string
   message: string
-  data: T
+  data: Type
 }

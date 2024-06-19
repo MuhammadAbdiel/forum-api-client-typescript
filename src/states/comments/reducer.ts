@@ -1,6 +1,11 @@
+import { CommentDetail } from '@/utils/types'
 import { ActionType } from './action'
+import { AddCommentAction, ReceiveCommentsAction } from './types'
 
-function commentsReducer(comments = [], action = {}) {
+function commentsReducer(
+  comments: CommentDetail[] = [],
+  action: ReceiveCommentsAction | AddCommentAction | any,
+): CommentDetail[] {
   switch (action.type) {
     case ActionType.RECEIVE_COMMENTS:
       return action.payload.comments
