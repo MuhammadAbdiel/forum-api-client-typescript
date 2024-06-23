@@ -1,6 +1,11 @@
+import { ReplyDetail } from '@/utils/types'
 import { ActionType } from './action'
+import { AddReplyAction, ReceiveRepliesAction } from './types'
 
-function repliesReducer(replies = [], action = {}) {
+function repliesReducer(
+  replies: ReplyDetail[] = [],
+  action: ReceiveRepliesAction | AddReplyAction | any,
+): ReplyDetail[] {
   switch (action.type) {
     case ActionType.RECEIVE_REPLIES:
       return action.payload.replies

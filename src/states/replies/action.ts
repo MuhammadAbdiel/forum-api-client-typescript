@@ -1,6 +1,14 @@
 import api from '@/utils/api'
 import Swal from 'sweetalert2'
 import { hideLoading, showLoading } from 'react-redux-loading-bar'
+import { AppDispatch } from '../store'
+import { Reply, ReplyDetail } from '@/utils/types'
+import {
+  AddReplyAction,
+  ClearRepliesAction,
+  DeleteReplyAction,
+  ReceiveRepliesAction,
+} from './types'
 
 const ActionType = {
   RECEIVE_REPLIES: 'RECEIVE_REPLIES',
@@ -9,7 +17,9 @@ const ActionType = {
   DELETE_REPLY: 'DELETE_REPLY',
 }
 
-function receiveRepliesActionCreator(replies) {
+function receiveRepliesActionCreator(
+  replies: ReplyDetail[],
+): ReceiveRepliesAction {
   return {
     type: ActionType.RECEIVE_REPLIES,
     payload: {
@@ -18,13 +28,13 @@ function receiveRepliesActionCreator(replies) {
   }
 }
 
-function clearRepliesActionCreator() {
+function clearRepliesActionCreator(): ClearRepliesAction {
   return {
     type: ActionType.CLEAR_REPLIES,
   }
 }
 
-function addReplyActionCreator(reply) {
+function addReplyActionCreator(reply: Reply): AddReplyAction {
   return {
     type: ActionType.ADD_REPLY,
     payload: {
@@ -33,7 +43,7 @@ function addReplyActionCreator(reply) {
   }
 }
 
-function deleteReplyActionCreator(replyId) {
+function deleteReplyActionCreator(replyId: string): DeleteReplyAction {
   return {
     type: ActionType.DELETE_REPLY,
     payload: {
@@ -42,8 +52,8 @@ function deleteReplyActionCreator(replyId) {
   }
 }
 
-function asyncReceiveReplies(threadId, commentId) {
-  return async (dispatch) => {
+function asyncReceiveReplies(threadId: string, commentId: string) {
+  return async (dispatch: AppDispatch) => {
     dispatch(clearRepliesActionCreator())
     dispatch(showLoading())
 
@@ -51,7 +61,7 @@ function asyncReceiveReplies(threadId, commentId) {
       const commentDetail = await api.getCommentById(threadId, commentId)
 
       dispatch(receiveRepliesActionCreator(commentDetail.replies))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -63,21 +73,19 @@ function asyncReceiveReplies(threadId, commentId) {
   }
 }
 
-function asyncClearReplies() {
-  return async (dispatch) => {
-    dispatch(clearRepliesActionCreator())
-  }
-}
-
-function asyncAddReply(threadId, commentId, { content }) {
-  return async (dispatch) => {
+function asyncAddReply(
+  threadId: string,
+  commentId: string,
+  { content }: { content: string },
+) {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {
       const reply = await api.createReply(threadId, commentId, { content })
       const user = await api.getOwnProfile()
 
-      const response = {
+      const response: any = {
         id: reply.id,
         content: reply.content,
         date: new Date().toISOString(),
@@ -86,7 +94,7 @@ function asyncAddReply(threadId, commentId, { content }) {
       }
 
       dispatch(addReplyActionCreator(response))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -98,15 +106,19 @@ function asyncAddReply(threadId, commentId, { content }) {
   }
 }
 
-function asyncDeleteReply(threadId, commentId, replyId) {
-  return async (dispatch) => {
+function asyncDeleteReply(
+  threadId: string,
+  commentId: string,
+  replyId: string,
+) {
+  return async (dispatch: AppDispatch) => {
     dispatch(showLoading())
 
     try {
       await api.deleteReply(threadId, commentId, replyId)
 
       dispatch(deleteReplyActionCreator(replyId))
-    } catch (error) {
+    } catch (error: any) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -123,7 +135,6 @@ export {
   receiveRepliesActionCreator,
   clearRepliesActionCreator,
   addReplyActionCreator,
-  asyncClearReplies,
   deleteReplyActionCreator,
   asyncReceiveReplies,
   asyncAddReply,
