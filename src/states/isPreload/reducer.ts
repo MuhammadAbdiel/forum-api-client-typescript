@@ -3,7 +3,7 @@ import { SetIsPreload } from './types'
 
 function isPreloadReducer(
   isPreload: boolean = true,
-  action: SetIsPreload,
+  action: SetIsPreload | any,
 ): boolean {
   switch (action.type) {
     case ActionType.SET_IS_PRELOAD:

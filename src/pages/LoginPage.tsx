@@ -10,9 +10,10 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { asyncSetAuthUser } from '@/states/authUser/action'
 import LoginInput from '@/components/LoginInput'
+import { useAppDispatch } from '@/states/hooks'
+import { LoginPayload } from '@/utils/types'
 
 const loginSchema = z.object({
   username: z
@@ -29,7 +30,7 @@ const loginSchema = z.object({
 })
 
 export default function LoginPage() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const [passwordType, setPasswordType] = useState('password')
 
@@ -45,7 +46,7 @@ export default function LoginPage() {
     },
   })
 
-  const onLogin = ({ username, password }) => {
+  const onLogin = ({ username, password }: LoginPayload) => {
     dispatch(asyncSetAuthUser({ username, password }))
     form.reset()
   }

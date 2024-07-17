@@ -4,7 +4,7 @@ import { AuthUser } from './types'
 
 function authUserReducer(
   authUser: User | null = null,
-  action: AuthUser,
+  action: AuthUser | any,
 ): User | null {
   switch (action.type) {
     case ActionType.SET_AUTH_USER:

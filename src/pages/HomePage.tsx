@@ -3,12 +3,13 @@ import Navbar from '../components/Navbar'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { asyncAddThread, asyncReceiveThreads } from '@/states/threads/action'
 import CreateThreadForm from '@/components/CreateThreadForm'
 import ThreadsList from '@/components/ThreadsList'
 import { useSearchParams } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '@/states/hooks'
+import { useEffect, useState } from 'react'
+import { CreateThreadPayload } from '@/utils/types'
 
 const createThreadSchema = z.object({
   title: z
@@ -26,8 +27,8 @@ export default function HomePage() {
   const [keyword, setKeyword] = useState(() => {
     return searchParams.get('keyword') || ''
   })
-  const threads = useSelector((state) => state.threads)
-  const dispatch = useDispatch()
+  const threads = useAppSelector((state) => state.threads)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(asyncReceiveThreads())
@@ -41,11 +42,11 @@ export default function HomePage() {
     },
   })
 
-  const onCreate = ({ title, body }) => {
+  const onCreate = ({ title, body }: CreateThreadPayload) => {
     dispatch(asyncAddThread({ title, body }))
   }
 
-  function onKeywordChangeHandler(keyword) {
+  function onKeywordChangeHandler(keyword: string) {
     setKeyword(keyword)
     setSearchParams({ keyword })
   }

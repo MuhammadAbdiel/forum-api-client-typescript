@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Link, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { asyncReceiveThreadDetail } from '@/states/threadDetail/action'
 import { useEffect } from 'react'
 import ThreadDetail from '@/components/ThreadDetail'
@@ -11,25 +10,26 @@ import {
 } from '@/states/comments/action'
 import Swal from 'sweetalert2'
 import { asyncAddReply, asyncDeleteReply } from '@/states/replies/action'
+import { useAppDispatch, useAppSelector } from '@/states/hooks'
 
 export default function DetailPage() {
-  const { id } = useParams()
-  const threadDetail = useSelector((state) => state.threadDetail)
-  const comments = useSelector((state) => state.comments)
-  const replies = useSelector((state) => state.replies)
+  const { id = '' } = useParams()
+  const threadDetail = useAppSelector((state) => state.threadDetail)
+  const comments = useAppSelector((state) => state.comments)
+  const replies = useAppSelector((state) => state.replies)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(asyncReceiveThreadDetail(id))
     dispatch(asyncReceiveComments(id))
   }, [id, dispatch, replies])
 
-  const onCommentThread = ({ content }) => {
+  const onCommentThread = ({ content }: { content: string }) => {
     dispatch(asyncAddComment(id, { content }))
   }
 
-  const onDeleteComment = (commentId) => {
+  const onDeleteComment = (commentId: string) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -51,11 +51,14 @@ export default function DetailPage() {
     })
   }
 
-  const onReplyComment = (commentId, { content }) => {
+  const onReplyComment = (
+    commentId: string,
+    { content }: { content: string },
+  ) => {
     dispatch(asyncAddReply(id, commentId, { content }))
   }
 
-  const onDeleteReply = (commentId, replyId) => {
+  const onDeleteReply = (commentId: string, replyId: string) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",

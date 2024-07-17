@@ -11,8 +11,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import RegisterInput from '@/components/RegisterInput'
-import { useDispatch } from 'react-redux'
 import { asyncRegisterUser } from '@/states/users/action'
+import { RegisterPayload } from '@/utils/types'
+import { useAppDispatch } from '@/states/hooks'
 
 const registerSchema = z.object({
   fullname: z
@@ -45,7 +46,7 @@ const registerSchema = z.object({
 
 export default function RegisterPage() {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const [passwordType, setPasswordType] = useState('password')
 
@@ -62,7 +63,7 @@ export default function RegisterPage() {
     },
   })
 
-  const onRegister = ({ username, password, fullname }) => {
+  const onRegister = ({ username, password, fullname }: RegisterPayload) => {
     dispatch(asyncRegisterUser({ username, password, fullname }))
 
     navigate('/')

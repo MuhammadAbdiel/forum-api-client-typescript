@@ -3,8 +3,8 @@ import { ActionType } from './action'
 import { ReceiveThreadDetailAction } from './types'
 
 function threadDetailReducer(
-  threadDetail: ThreadDetail,
-  action: ReceiveThreadDetailAction,
+  threadDetail: ThreadDetail | null = null,
+  action: ReceiveThreadDetailAction | any,
 ): ThreadDetail | null {
   switch (action.type) {
     case ActionType.RECEIVE_THREAD_DETAIL:
